@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>更新页面</title>
+	<style type="text/css">
+		table{
+			margin-top: 50px;
+			margin-left: 200px;
+			
+		}
+		input{
+			height: 50px;
+			width: 300px;
+			font-size: 30px;
+			text-indent: 10px;
+		}
+		button{
+			font-size: 40px;
+		}
+		.error{
+			color:red;
+			font-size: 20px;
+		}
+		select{
+			font-size: 40px;
+		}
+		a{
+			text-decoration: none;
+			font-size: 30px;
+			margin-left: 20px;
+		}
+	</style>
+</head>
+<body>
+<table>
+	<caption><h1>宠物注册页面</h1></caption>
+	<tr>
+		<td>
+			<span id="petType"></span>
+			<input type="hidden" name="keypath">
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input readonly placeholder="用户名" type="text" name="username">
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input placeholder="宠物名称" type="text" name="pet">
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input placeholder="密码" type="password" name="password">
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input placeholder="年龄" type="number" name="age">
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input placeholder="颜色" type="text" name="color">
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input placeholder="昵称" type="text" name="nickname">
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input placeholder="重量" type="number" name="weight">(斤)
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<button name='btn'>修改</button>
+		</td>
+	</tr>
+</table>
+
+<script src="js/jquery.js"></script>
+<script src="js/common.js"></script>
+<script>
+	$(function(){
+		const $username=$('[name=username]');
+		const $pet = $('[name=pet]');
+		const $password = $('[name=password]');
+		const $confirm=$('[name=confirm]');
+		const $age = $('[name=age]');
+		const $color = $('[name=color]');
+		const $nickname=$('[name=nickname]');
+		const $weight=$('[name=weight]');
+		const $btn = $('[name=btn]');
+		const session = sessionStorage;
+		//加载信息
+		function loadInfo(){
+			$('#petType').text(session.store);
+			$('[name=keypath]').val(session.keypath)
+			$username.val(session.name)
+			hmd.queryDB(session.store,'only',session.name,'name',function(msg){
+				console.log(msg)
+				$pet.val(msg.value.pet)
+				$password.val(msg.value.password)
+				$age.val(msg.value.age)
+				$color.val(msg.value.color)
+				$nickname.val(msg.value.nickname)
+				$weight.val(msg.value.weight)
+			})
+		}
+
+		$btn.click(function(){
+			hmd.insertDB($('#petType').text(),{
+				id : +session.keyPath,
+				name : session.name,
+				pet : $pet.val(),
+				password : $password.val(),
+				age : $age.val(),
+				color : $color.val(),
+				nickname : $nickname.val(),
+				weight : $weight.val()
+			},function(){
+				location.href = 'home.html'
+			})
+		})
+		function init(){
+			setTimeout(function(){
+				loadInfo();
+			},500)
+			
+		}
+
+		init();
+	})
+</script>
+
+</body>
+</html>
